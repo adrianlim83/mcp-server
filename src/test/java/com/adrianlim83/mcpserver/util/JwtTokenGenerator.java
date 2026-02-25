@@ -11,9 +11,12 @@ import java.util.Date;
 /**
  * JWT Token Generator Utility for Testing
  * Generates valid JWT tokens that can be used to test protected endpoints
+ * 
+ * Note: This uses the same secret as configured in application.properties (mcp.jwt.secret)
  */
 public class JwtTokenGenerator {
 
+    // This should match the value in application.properties: mcp.jwt.secret
     private static final String SECRET_STRING = "mcp-server-secret-key-for-jwt-validation-minimum-256-bits";
 
     public static String generateToken(String subject) {

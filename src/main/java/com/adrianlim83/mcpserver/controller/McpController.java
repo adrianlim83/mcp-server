@@ -42,7 +42,7 @@ public class McpController {
      */
     @GetMapping("/mcp/health")
     public ResponseEntity<McpResponse> healthCheck(Authentication authentication) {
-        String username = authentication != null ? authentication.getName() : "anonymous";
+        String username = authentication.getName();
         McpResponse response = new McpResponse("MCP Server is healthy. Authenticated as: " + username);
         return ResponseEntity.ok(response);
     }

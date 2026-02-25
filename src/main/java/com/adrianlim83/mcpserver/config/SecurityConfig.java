@@ -1,5 +1,6 @@
 package com.adrianlim83.mcpserver.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,9 @@ import java.security.NoSuchAlgorithmException;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${mcp.jwt.secret}")
+    private String jwtSecret;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,14 +47,13 @@ public class SecurityConfig {
      */
     @Bean
     public JwtDecoder jwtDecoder() {
-        // For prototype: use a hardcoded secret key
+        // For prototype: use configured secret key
         // In production: use spring.security.oauth2.resourceserver.jwt.jwk-set-uri
-        String secretString = "mcp-server-secret-key-for-jwt-validation-minimum-256-bits";
         
         try {
             // Create a 256-bit key for HS256
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(secretString.getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest(jwtSecret.getBytes(StandardCharsets.UTF_8));
             SecretKey secretKey = new SecretKeySpec(hash, "HmacSHA256");
             
             return NimbusJwtDecoder.withSecretKey(secretKey).build();
